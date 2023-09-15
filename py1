@@ -1,1 +1,7 @@
-hello
+import numpy as np
+x=[1,10,1000]
+for i in range(3):
+    a=(1/np.exp(np.sin(x[i]+1)))
+    b=(5/4+1/(x[i]**(15)))
+    res=np.log(a/b)/np.log(1+x[i]**2)
+    print(res)
