@@ -12,8 +12,8 @@ for x in x_1:
     y_2 = np.sum(y)
     y_1 = np.append(y_1, y_2)
     y = np.array([])
- 
+
 plt.plot(x_1, y_1)
 plt.axis('equal')
-plt.grid (True)
+plt.grid(True)
 plt.show()
