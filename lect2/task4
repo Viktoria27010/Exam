@@ -1,0 +1,9 @@
+n=int(input())
+import turtle
+turtle.shape('turtle')
+for i in range(n):
+    turtle.forward(60)
+    turtle.left(180)
+    turtle.stamp()
+    turtle.forward(60)
+    turtle.left(360/n)
