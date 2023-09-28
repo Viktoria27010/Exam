@@ -1,0 +1,11 @@
+import turtle
+import numpy as np
+window = turtle.Screen()
+window.title("спираль")
+turtle.shape("turtle")
+turtle.speed(0)
+x = 0
+while True:
+    turtle.forward(x / 2 *  np.pi)
+    turtle.left(2 * np.pi)
+    x += 0.01
