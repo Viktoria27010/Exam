@@ -1,2 +1,7 @@
 from random import *
-print(random()*100)
+import turtle as t
+t.speed(1000)
+t.color('Blue')
+for i in range(100):
+    t.forward(randint(1, 50))
+    t.left(randint(0, 360))
