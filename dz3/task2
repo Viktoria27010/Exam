@@ -1,4 +1,6 @@
 import turtle as t
+t.color('Blue')
+t.shape('turtle')
 
 
 a = [(1, 90, 20, 90, 10, 90, 20, 90, 10, 0, 10, 90, 20), 

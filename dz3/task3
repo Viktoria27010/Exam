@@ -1,2 +1,19 @@
-d = {'A': 1, 'B': 2, 'C': 3}
-print(d['C'])
+import turtle as t
+t.color('Blue')
+t.shape('turtle')
+
+with open('D:/turtle.txt', 'r') as f:
+    a = list(f)
+    for i in list((t.textinput('Введите индекс', 'индекс: '))):
+     i = int(i)
+    for j in range(len(a[i])):
+        if a[i][j] > 20:
+            t.left(a[i][j])
+        elif a[i][j] == 0:
+            t.up()
+        elif a[i][j] == 1:
+            t.down()
+        else:
+            t.forward(a[i][j])
+
+t.exitonclick()
