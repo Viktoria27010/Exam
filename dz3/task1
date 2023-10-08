@@ -5,3 +5,4 @@ t.color('Blue')
 for i in range(100):
     t.forward(randint(1, 50))
     t.left(randint(0, 360))
+    
