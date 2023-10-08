@@ -2,13 +2,13 @@ from random import randint
 import turtle as t
 
 
-number_of_turtles = 30
+number_of_turtles = 40
 steps_of_time_number = 100
 
 pool = [t.Turtle(shape='circle') for i in range(number_of_turtles)]
 for unit in pool:
     unit.penup()
-    unit.speed(50)
+    unit.speed(randint(10, 100))
     unit.goto(randint(-200, 200), randint(-200, 200))
 
 for i in range(steps_of_time_number):
