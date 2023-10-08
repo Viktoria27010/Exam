@@ -1,36 +1,35 @@
 from random import randint
-import turtle
+import turtle as t
 
 
-number_of_turtles = 10
+number_of_turtles = 30
 steps_of_time_number = 100
 
-
-pool = [turtle.Turtle(shape='circle') for i in range(number_of_turtles)]
+pool = [t.Turtle(shape='circle') for i in range(number_of_turtles)]
 for unit in pool:
     unit.penup()
-    unit.speed(randint(10, 40))
+    unit.speed(50)
     unit.goto(randint(-200, 200), randint(-200, 200))
 
-
 for i in range(steps_of_time_number):
-    for j in range(len(pool)):
-        angj = pool[j].heading()
-        xj, yj = pool[j].pos()
-        for k in range(len(pool)):
-            if k != j:
-                xk, yk = pool[k].pos()
-                angk = pool[k].heading()
-                dx = abs(xj - xk)
-                dy = abs(yj - yk)
-                if dx <= 3 and dy <= 3: 
-                    pool[j].seth(angj)
-                    pool[k].seth(angk)
-                    pool[j].fd(5)
-                    pool[k].fd(5)
-        if xj > 200 or xj < -200:
-            pool[j].seth(180 - angj)
-        if xj > 200 or xj < -200:
-            pool[j].seth(180 - angj)
-        pool[j].fd(50)
-        pool[j].left(randint(0, 360))
+    for m in range(len(pool)):
+        ang1 = pool[m].heading() 
+        x1, y1 = pool[m].pos() 
+        for d in range(len(pool)): 
+            if d != m:
+                x2, y2 = pool[d].pos()
+                ang2 = pool[d].heading()
+                dx = abs(x1-x2)     
+                dy = abs(y1-y2)     
+                if dx <= 3 and dy <= 3:     
+                    pool[m].seth(ang1)  
+                    pool[d].seth(ang2)   
+                    pool[m].fd(5)           
+                    pool[d].fd(5)           
+        if x1 < -200 or x1 > 200:          
+            pool[m].seth(180 - ang1)
+        elif y1 < -200 or y1 > 200:        
+            pool[m].seth(-ang1)
+        pool[m].fd(5)
+        pool[m].left(randint(0, 360))
+t.exitonclick()
