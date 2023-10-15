@@ -1,0 +1,65 @@
+class DNA(object):
+    def __init__(self, string : str) -> None:
+        self.string = string
+
+
+    def count_nucleotides(self) -> dict:
+        D_A = self.string.count('A')
+        D_T = self.string.count('T')
+        D_G = self.string.count('G')
+        D_C = self.string.count('C')
+        self.count = {'A': D_A, 'T': D_T, 'C': D_C, 'G': D_G}
+        return self.count
+
+    def transcribe(self) -> str:
+        self.string_transcribed = self.string.replace('T', 'U')
+        return self.string_transcribed
+    
+
+    def complement_dna(self) -> str:
+        D_G = [*self.string]
+        for i in range(len(D_G)):
+            if D_G[i] == 'A':
+             D_G[i] = 'T'
+            elif D_G[i] == 'T':
+             D_G[i] = 'A'
+            elif D_G[i] == 'G':
+             D_G[i] = 'C'
+            elif D_G[i] == 'C':
+             D_G[i] = 'G'
+             self.D_K = ''.join(D_G)
+        return self.D_K
+
+
+    def hamming_distance(self, s2 : str) -> int:
+        if len(self.string) != len(s2):
+            self.HD = 'oops'
+        else:
+            c = 0
+            for i in range(0, len(self.string)):
+                if self.string[i] != s2[i]:
+                    c += 1
+            self.HD = c
+        return self.HD
+
+class RNA(object):
+    def __init__(self, string : str) -> None:
+        self.string = string
+
+
+    def transcribe(self) -> str:
+         self.string_transcribed = self.string.replace('U', 'T')
+         return self.string_transcribed
+    
+
+
+s = DNA('ATGCATGCATGC')
+s.count_nucleotides()
+s.transcribe()
+s.complement_dna()
+s.hamming_distance('AGGTGTCCTCAC')
+print(s.count, s.string_transcribed, s.D_K, s.HD, sep='\n')
+
+r = RNA('AUGCAUGCAUGC')
+r.transcribe()
+print(r.string_transcribed)
