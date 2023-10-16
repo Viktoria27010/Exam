@@ -53,13 +53,13 @@ class RNA(object):
     
 
 
-s = DNA('ATGCATGCATGC')
+s = DNA('AATCCGCAGCTAT')
 s.count_nucleotides()
 s.transcribe()
 s.complement_dna()
-s.hamming_distance('AGGTGTCCTCAC')
+s.hamming_distance('AAACCCTATGCCG')
 print(s.count, s.string_transcribed, s.D_K, s.HD, sep='\n')
 
-r = RNA('AUGCAUGCAUGC')
+r = RNA('AUGCGCGAUUUGC')
 r.transcribe()
 print(r.string_transcribed)
