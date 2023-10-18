@@ -1,0 +1,80 @@
+import json
+
+
+with open('rna_codon_table.json') as f:
+    input_json = json.loads(f.read())
+
+
+class SequenceError(Exception):
+    def __init__(self, message: str) -> None:
+        self.message = message
+    
+    def __str__(self) -> str:
+        return f'{self.message}'
+
+class Sequence(object):
+    seq_type = None
+    types = set(['DNA', 'RNA', 'Protein']) 
+
+
+    def __init__(self, file_name: str) -> None:
+        
+        
+    def _parse(self, file_name: str) -> tuple[str, str]:
+        
+    
+    def _check(self, string: str) -> bool:
+        
+    
+    def hamming_distance(self, sequence: str) -> int:
+        
+    
+    def count_nucleotides(self) -> None:
+       
+
+    def to_protein(self) -> None:
+        
+    
+    def transcribe(self) -> None:
+       
+
+class DNA(Sequence):
+    _type = 'DNA'
+    def count_nucleotides(self) -> dict:
+        
+
+    
+    def complement_dna(self) -> str:
+        
+    
+    def transcribe(self) -> str:
+        
+    
+    def to_protein(self) -> str:
+        
+    
+    def restriction_slices(self) -> int:
+        
+
+class RNA(Sequence):
+    _type = 'RNA'
+    def count_nucleotides(self) -> dict:
+        
+    
+    def transcribe(self) -> str:
+        
+    
+    def to_protein(self) -> str:
+        
+
+class Protein(Sequence):
+    _type = 'Protein'
+    
+
+    def count_amino_acids(self) -> dict:
+        
+    
+    def to_protein(self) -> str:
+        
+    
+    def charge(self) -> int:
