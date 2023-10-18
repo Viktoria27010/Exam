@@ -1,0 +1,71 @@
+class Sequence(object):
+    def __init__(self, sequence: str) -> None:
+       self.string = sequence
+       
+    def transcribe(self) -> None:
+       raise NameError
+    
+    def hamming_distance(self, s2: str) -> int:
+        if len(self.string) != len(s2):
+            raise ValueError('Ooops')
+        else: c = 0
+        for i in range(0, len(self.string)):
+                if self.string[i] != s2[i]:
+                    c += 1
+                    self.HDseq = c
+        return self.HDseq
+
+class DNA(Sequence):
+    def count_nucleotides(self) -> dict:
+        D_A = self.string.count('A')
+        D_T = self.string.count('T')
+        D_G = self.string.count('G')
+        D_C = self.string.count('C')
+        self.countedDNA = {'A': D_A, 'T': D_T, 'C': D_C, 'G': D_G}
+        return self.countedDNA
+
+    def transcribe(self) -> str:
+        self.string_transcribedDNA = self.string.replace('T', 'U')
+        return self.string_transcribedDNA
+
+    def complement_dna(self) -> str:
+       D_G = [*self.string]
+       for i in range(len(D_G)):
+            if D_G[i] == 'A':
+             D_G[i] = 'T'
+            elif D_G[i] == 'T':
+             D_G[i] = 'A'
+            elif D_G[i] == 'G':
+             D_G[i] = 'C'
+            elif D_G[i] == 'C':
+             D_G[i] = 'G'
+             self.D_K = ''.join(D_G)
+             return self.D_K
+    
+class RNA(Sequence):
+    def count_nucleotides(self) -> dict:
+         D_AA = self.string.count('A')
+         D_UU = self.string.count('U')
+         D_GG = self.string.count('G')
+         D_CC = self.string.count('C')
+         self.countedRNA = {'A': D_AA, 'U': D_UU, 'C': D_CC, 'G': D_GG}
+         return self.countedRNA
+    
+    def transcribe(self) -> str:
+         self.string_transcribed = self.string.replace('U', 'T')
+         return self.string_transcribed
+
+
+seq = Sequence('AATCCGCAGCTAT')
+seq.hamming_distance('AGGCGCATTGCGT')
+print(seq.HDseq)
+s = DNA('AATCCGCAGCTAT')
+s.count_nucleotides()
+s.transcribe()
+s.complement_dna()
+print(s.countedDNA, s.string_transcribedDNA, s.D_K, sep='\n')
+
+r = RNA('AUGCGCGAUUUGC')
+r.count_nucleotides()
+r.transcribe()
+print(r.countedRNA, r.string_transcribed, sep='\n')
