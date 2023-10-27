@@ -1,9 +1,11 @@
 import json
+import re
 
-
-with open('rna_codon_table.json') as f:
-    input_json = json.loads(f.read())
-
+with open('D:/rna_codon_table.json') as json_file:
+    data = json.load(json_file)
+    data.pop('UAA')
+    data.pop('UAG')
+    data.pop('UGA')
 
 class SequenceError(Exception):
     def __init__(self, message: str) -> None:
@@ -14,67 +16,30 @@ class SequenceError(Exception):
 
 class Sequence(object):
     seq_type = None
-    types = set(['DNA', 'RNA', 'Protein']) 
-
-
+    types = set(['DNA', 'RNA', 'Protein'])
+    _prot_acids = set(data.values())
+    set_dd = {A, G, C, T}
+    _dna_nucls = set_dd
+    set_rr = {A, G, C, U}
+    _rna_nucls = set_rr
+    
     def __init__(self, file_name: str) -> None:
-        
-        
-    def _parse(self, file_name: str) -> tuple[str, str]:
-        
+        self.string = file_name
+
+
+    def _parse(self) -> tuple[str, str]:
+        motifs = dict()
+        with open(self.string) as fp:
+            lines = f.readlines()
+            for i in range(0, len(lines)):
+             s = lines[i].strip()
+            if s[0] == '>':
+             key = s[1:]
+            else:
+             motifs[key] = s
+             motifs_tup = tuple(motifs.items())
+        return motifs_tup
     
+
     def _check(self, string: str) -> bool:
-        
-    
-    def hamming_distance(self, sequence: str) -> int:
-        
-    
-    def count_nucleotides(self) -> None:
-       
-
-    def to_protein(self) -> None:
-        
-    
-    def transcribe(self) -> None:
-       
-
-class DNA(Sequence):
-    _type = 'DNA'
-    def count_nucleotides(self) -> dict:
-        
-
-    
-    def complement_dna(self) -> str:
-        
-    
-    def transcribe(self) -> str:
-        
-    
-    def to_protein(self) -> str:
-        
-    
-    def restriction_slices(self) -> int:
-        
-
-class RNA(Sequence):
-    _type = 'RNA'
-    def count_nucleotides(self) -> dict:
-        
-    
-    def transcribe(self) -> str:
-        
-    
-    def to_protein(self) -> str:
-        
-
-class Protein(Sequence):
-    _type = 'Protein'
-    
-
-    def count_amino_acids(self) -> dict:
-        
-    
-    def to_protein(self) -> str:
-        
-    
-    def charge(self) -> int:
+        string = sequence

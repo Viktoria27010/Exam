@@ -1,0 +1,14 @@
+import re
+def _parse(self) -> tuple[str, str]:
+        with open(self.string) as fp:
+             name, seq = None, []
+             for line in self.string:
+              line = line.rstrip()
+             if line.startswith(">"):
+                if name: yield (name, ''.join(seq))
+                name, seq = line, []
+             else:
+                seq.append(line)
+             if name: yield (name, ''.join(seq))
+        fasted = [name, seq] 
+        return fasted
