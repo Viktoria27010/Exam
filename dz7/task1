@@ -12,3 +12,19 @@ def _parse(self) -> tuple[str, str]:
              if name: yield (name, ''.join(seq))
         fasted = [name, seq] 
         return fasted
+
+
+
+ def _parse(self) -> tuple[str, str]:
+        motifs = dict()
+        with open(self.string) as fp:
+            lines = f.readlines()
+            for i in range(0, len(lines)):
+             s = lines[i].strip()
+            if s[0] == '>':
+             key = s[1:]
+            else:
+             motifs[key] = s
+             motifs_tup = tuple(motifs.items())
+        return motifs_tup
+    

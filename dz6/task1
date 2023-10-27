@@ -22,24 +22,159 @@ class Sequence(object):
     _dna_nucls = set_dd
     set_rr = {A, G, C, U}
     _rna_nucls = set_rr
-    
+
+     
     def __init__(self, file_name: str) -> None:
         self.string = file_name
-
-
-    def _parse(self) -> tuple[str, str]:
-        motifs = dict()
+        string, seq_type = self._parse(file_name)
+        if self._check(string, seq_type):
+            self.string = string
+            self.seq_type = seq_type
+        else:
+            raise NameError
+   
+    def _parse(self) -> str:
         with open(self.string) as fp:
-            lines = f.readlines()
-            for i in range(0, len(lines)):
-             s = lines[i].strip()
-            if s[0] == '>':
-             key = s[1:]
-            else:
-             motifs[key] = s
-             motifs_tup = tuple(motifs.items())
-        return motifs_tup
-    
+            self.sektype = fp.readline()
+            self.seq = fp.readline()
+        return self.sektype, self.seq
 
     def _check(self, string: str) -> bool:
-        string = sequence
+       for nucl in string:
+            if self.sektype == 'DNA' and nucl not in self._dna_nucls:
+                return False
+            elif self.sektype == 'RNA' and nucl not in self._rna_nucls:
+                return False
+            else:
+                return True
+            
+
+    def hamming_distance(self, s2: str) -> int:
+         if len(self.string) != len(s2):
+            raise ValueError('Ooops')
+         else: c = 0
+         for i in range(0, len(self.string)):
+                if self.string[i] != s2[i]:
+                    c += 1
+                    self.HDseq = c
+         return self.HDseq
+
+    def count_nucleotides(self) -> None:
+        raise NameError
+
+    def to_protein(self) -> None:
+        raise NameError
+    
+    def transcribe(self) -> None:
+        raise NameError
+
+class DNA(Sequence):
+    _type = 'DNA'
+    def count_nucleotides(self) -> dict:
+        D_A = self.string.count('A')
+        D_T = self.string.count('T')
+        D_G = self.string.count('G')
+        D_C = self.string.count('C')
+        self.countedDNA = {'A': D_A, 'T': D_T, 'C': D_C, 'G': D_G}
+        return self.countedDNA
+
+            
+    def complement_dna(self) -> str:
+      D_G = [*self.string]
+      for i in range(len(D_G)):
+            if D_G[i] == 'A':
+             D_G[i] = 'T'
+            elif D_G[i] == 'T':
+             D_G[i] = 'A'
+            elif D_G[i] == 'G':
+             D_G[i] = 'C'
+            elif D_G[i] == 'C':
+             D_G[i] = 'G'
+             self.D_K = ''.join(D_G)
+             return self.D_K
+    def transcribe(self) -> str:
+     self.string_transcribedDNA = self.string.replace('T', 'U')
+     return self.string_transcribedDNA
+    
+    def to_protein(self) -> str:
+        protein = ''
+        m_rna = ''
+        for i in range(len(self.string)):
+            if self.string[i] == 'A':
+                m_rna += 'A'
+            if self.string[i] == 'T':
+                m_rna += 'U'
+            if self.string[i] == 'C':
+                m_rna += 'C'
+            if self.string[i] == 'G':
+                m_rna += 'G'
+        for i in range(0, len(m_rna), 3):
+            codon = m_rna[i:(i+3)]
+            protein += data[codon]
+        return protein
+
+    
+   # def restriction_slices(self) -> int:
+        """
+        Input: None
+
+        Output: number of slices by EcoRI restrictase
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # EcoRI restrictase slices 'GAATTC'/'CTTAAG' sequences, return        #
+        # resulting number of slices                                          #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+
+class RNA(Sequence):
+    _type = 'RNA'
+    def count_nucleotides(self) -> dict:
+        D_AA = self.string.count('A')
+        D_UU = self.string.count('U')
+        D_GG = self.string.count('G')
+        D_CC = self.string.count('C')
+        self.countedRNA = {'A': D_AA, 'U': D_UU, 'C': D_CC, 'G': D_GG}
+        return self.countedRNA
+    
+    def transcribe(self) -> str:
+        self.string_transcribed = self.string.replace('U', 'T')
+        return self.string_transcribed
+    
+    def to_protein(self) -> str:
+         protein = ''
+         for i in range(0, len(self.string), 3):
+            codon = self.string[i:(i+3)]
+            protein += data[codon]
+         return protein
+
+class Protein(Sequence):
+    _type = 'Protein'
+    set_pp = {K, R, H}
+    _pos_acids = set_pp
+    set_nn = {D, E}
+    _neg_acids  = set_nn
+    def count_amino_acids(self) -> dict:
+        Aminoacids = {'A': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0, 'I': 0, 'K': 0,
+                      'L': 0, 'M': 0, 'N': 0, 'P': 0, 'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'V': 0, 'W': 0, 'Y': 0}
+        for i in range(len(self.string)):
+            Aminoacids[self.string[i]] += 1
+            return Aminoacids
+    
+    def to_protein(self) -> str:
+        return self.string
+    
+    def charge(self) -> int:
+        charge = 0
+        for i in range(len(self.string)):
+            if self.string[i] == 'K' or self.string[i] == 'R' or self.string[i] == 'H':
+                charge += 1
+            elif self.string[i] == 'D' or self.string[i] == 'E':
+                charge -= 1
+            else:
+                charge += 0
+        return charge
+    
+file_name = Sequence(input())
