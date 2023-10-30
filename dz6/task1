@@ -470,7 +470,7 @@ class Protein(Sequence):
             if i in self._pos_acids:
                 charge += 1
             if i in self._neg_acids:
-                charge+= 1
+                charge-= 1
         self.chargee = charge
         return self.chargee
             
