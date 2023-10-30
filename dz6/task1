@@ -76,7 +76,7 @@ class Sequence(object):
         # sequence                                                            #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        with open(self.file_name, 'r') as fp:
+        with open(file_name, 'r') as fp:
             lines = fp.readlines()
             sequence = ''
             seq_type = ''
@@ -475,4 +475,3 @@ class Protein(Sequence):
         return self.chargee
             
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-seq = Sequence(input())
