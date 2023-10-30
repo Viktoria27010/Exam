@@ -33,10 +33,8 @@ class Sequence(object):
     #######################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     _prot_acids = set(data.values())
-    set_dd = {A, G, C, T}
-    _dna_nucls = set_dd
-    set_rr = {A, G, C, U}
-    _rna_nucls = set_rr
+    _dna_nucls = set(['A', 'T', 'G', 'C'])
+    _rna_nucls = set(['A', 'U', 'G', 'C'])
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -57,16 +55,12 @@ class Sequence(object):
         # to sequence_type, else raise Error                                  #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        self.string = file_name
-        string, seq_type = self._parse(file_name)
-        if self._check(string, seq_type):
-            self.string = string
-            self.seq_type = seq_type
-        else:
-            raise NameError
+        self.file_name = file_name  
+        self.seq_type, self.sequence = self._parse(file_name)
+        
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
    
-    def _parse(self) -> str:
+    def _parse(self, file_name: str) -> tuple[str, str]:
         """
         Input:
         - file_name : FASTA file with sequence_name, sequence_type and 
@@ -82,10 +76,17 @@ class Sequence(object):
         # sequence                                                            #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        with open(self.string) as fp:
-            self.sektype = fp.readline()
-            self.seq = fp.readline()
-        return self.sektype, self.seq
+        with open(self.file_name, 'r') as fp:
+            lines = fp.readlines()
+            sequence = ''
+            seq_type = ''
+            for i, ln in enumerate(lines):
+                ln = ln.strip()
+                if '>' in ln:
+                    seq_type = ln.split()[1]
+                    sequence = lines[i+1].strip()
+                    break
+        return (seq_type, sequence)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     def _check(self, string: str) -> bool:
@@ -104,10 +105,14 @@ class Sequence(object):
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         for nucl in string:
-            if self.sektype == 'DNA' and nucl not in self._dna_nucls:
+            if self.seq_type not in self.types:
+             return False 
+            elif self.seq_type == 'DNA' and nucl not in self._dna_nucls:
                 return False
-            elif self.sektype == 'RNA' and nucl not in self._rna_nucls:
+            elif self.seq_type == 'RNA' and nucl not in self._rna_nucls:
                 return False
+            elif self.seq_type == 'Protein' and nucl not in self._prot_acids:
+                    return False
             else:
                 return True
             
@@ -129,11 +134,11 @@ class Sequence(object):
         # and count different letters.                                        #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        if len(self.string) != len(s2):
+        if len(self.file_name) != len(s2):
             raise ValueError('Ooops')
         else: c = 0
-        for i in range(0, len(self.string)):
-                if self.string[i] != s2[i]:
+        for i in range(0, len(self.sequence)):
+                if self.sequence[i] != s2[i]:
                     c += 1
                     self.HDseq = c
         return self.HDseq
@@ -201,10 +206,10 @@ class DNA(Sequence):
         # looping over sequence_attribute or using a standard string method.  #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        D_A = self.string.count('A')
-        D_T = self.string.count('T')
-        D_G = self.string.count('G')
-        D_C = self.string.count('C')
+        D_A = self.sequence.count('A')
+        D_T = self.sequence.count('T')
+        D_G = self.sequence.count('G')
+        D_C = self.sequence.count('C')
         self.countedDNA = {'A': D_A, 'T': D_T, 'C': D_C, 'G': D_G}
         return self.countedDNA
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -224,7 +229,7 @@ class DNA(Sequence):
         # to the empty string.                                                #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        D_G = [*self.string]
+        D_G = [*self.sequence]
         for i in range(len(D_G)):
             if D_G[i] == 'A':
              D_G[i] = 'T'
@@ -250,7 +255,7 @@ class DNA(Sequence):
         # to the empty string.                                                #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        self.string_transcribedDNA = self.string.replace('T', 'U')
+        self.string_transcribedDNA = self.sequence.replace('T', 'U')
         return self.string_transcribedDNA
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     
@@ -270,21 +275,21 @@ class DNA(Sequence):
         # If start codon was not found - raise Error                          #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        protein = ''
-        m_rna = ''
-        for i in range(len(self.string)):
-            if self.string[i] == 'A':
-                m_rna += 'A'
-            if self.string[i] == 'T':
-                m_rna += 'U'
-            if self.string[i] == 'C':
-                m_rna += 'C'
-            if self.string[i] == 'G':
-                m_rna += 'G'
-        for i in range(0, len(m_rna), 3):
-            codon = m_rna[i:(i+3)]
-            protein += data[codon]
-        return protein
+        transcr_dna = self.sequence.replace('T', 'U')
+        if 'AUG' not in transcr_dna:
+            raise ValueError("No start codon")
+        prot = []
+
+        index = transcr_dna.index('AUG')
+        for i in range(index+3, len(transcr_dna), 3):
+            codon = transcr_dna[i:i+3]
+            prot.append(data[codon])
+    
+            if codon in ["UAA", "UAG", "UGA"]:
+                break
+        index += 3
+        return (prot)
+
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     
@@ -300,7 +305,7 @@ class DNA(Sequence):
         # resulting number of slices                                          #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        
+        return len(self.sequence.split('GAATTC', 'CTTAAG'))
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
 class RNA(Sequence):
@@ -320,10 +325,10 @@ class RNA(Sequence):
         # looping over sequence_attribute or using a standard string method.  #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        D_AA = self.string.count('A')
-        D_UU = self.string.count('U')
-        D_GG = self.string.count('G')
-        D_CC = self.string.count('C')
+        D_AA = self.sequence.count('A')
+        D_UU = self.sequence.count('U')
+        D_GG = self.sequence.count('G')
+        D_CC = self.sequence.count('C')
         self.countedRNA = {'A': D_AA, 'U': D_UU, 'C': D_CC, 'G': D_GG}
         return self.countedRNA
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -341,8 +346,8 @@ class RNA(Sequence):
         # to the empty string.                                                #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        self.string_transcribed = self.string.replace('U', 'T')
-        return self.string_transcribed
+        self.string_transcribedRNA = self.sequence.replace('U', 'T')
+        return self.string_transcribedRNA
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     
     def to_protein(self) -> str:
@@ -360,11 +365,22 @@ class RNA(Sequence):
         # If start codon was not found - raise Error                          #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        protein = ''
-        for i in range(0, len(self.string), 3):
-            codon = self.string[i:(i+3)]
-            protein += data[codon]
-        return protein
+
+        transcr_rna = self.sequence.replace('T', 'U')
+        if 'AUG' not in transcr_rna:
+            raise ValueError("No start codon")
+        protrna = []
+
+        index = transcr_rna.index('AUG')
+        for i in range(index+3, len(transcr_rna), 3):
+            codon = transcr_rna[i:i+3]
+            protrna.append(data[codon])
+    
+            if codon in ["UAA", "UAG", "UGA"]:
+                break
+        index += 3
+        return (protrna)
+    
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
 class Protein(Sequence):
@@ -375,10 +391,8 @@ class Protein(Sequence):
     # amino acids: _pos_acids and _neg_acids                              #
     #######################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    set_pp = {K, R, H}
-    _pos_acids = set_pp
-    set_nn = {D, E}
-    _neg_acids  = set_nn
+    _pos_acids = set(['K', 'R', 'H'])
+    _neg_acids  = set(['D', 'E'])
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     def count_amino_acids(self) -> dict:
@@ -397,12 +411,29 @@ class Protein(Sequence):
         # looping over sequenceattribute or using a standard string method.   #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        Aminoacids = {'A': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0, 'I': 0, 'K': 0,
-                      'L': 0, 'M': 0, 'N': 0, 'P': 0, 'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'V': 0, 'W': 0, 'Y': 0}
-        for i in range(len(self.string)):
-            Aminoacids[self.string[i]] += 1
-            return Aminoacids
-    
+        PP_A=self.sequence.count('A')
+        PP_R=self.sequence.count('R')
+        PP_N=self.sequence.count('N')
+        PP_D=self.sequence.count('D')
+        PP_C=self.sequence.count('C')
+        PP_Q=self.sequence.count('Q')
+        PP_E=self.sequence.count('E')
+        PP_G=self.sequence.count('G')
+        PP_H=self.sequence.count('H')
+        PP_I=self.sequence.count('I')
+        PP_L=self.sequence.count('L')
+        PP_K=self.sequence.count('K')
+        PP_M=self.sequence.count('M')
+        PP_F=self.sequence.count('F')
+        PP_P=self.sequence.count('P')
+        PP_S=self.sequence.count('S')
+        PP_T=self.sequence.count('T')
+        PP_W=self.sequence.count('W')
+        PP_Y=self.sequence.count('Y')
+        PP_V=self.sequence.count('V')
+        self.countaa = {'A': PP_A, 'R': PP_R, 'N': PP_N, 'D': PP_D, 'C': PP_C, 'Q': PP_Q, 'E': PP_E, 'G': PP_G, 'H': PP_H, 'I': PP_I,
+                      'L': PP_L, 'K': PP_K, 'M': PP_M, 'F': PP_F, 'P': PP_P, 'S': PP_S, 'T': PP_T, 'W': PP_W, 'Y': PP_Y, 'V': PP_V}
+        return self.countaa
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     def to_protein(self) -> str:
         """
@@ -417,7 +448,7 @@ class Protein(Sequence):
         # Returning sequence_attribute is enough                              #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        return self.string
+        return self.sequence
     
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     def charge(self) -> int:
@@ -435,14 +466,13 @@ class Protein(Sequence):
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         charge = 0
-        for i in range(len(self.string)):
-            if self.string[i] == 'K' or self.string[i] == 'R' or self.string[i] == 'H':
+        for i in self.sequence:
+            if i in self._pos_acids:
                 charge += 1
-            elif self.string[i] == 'D' or self.string[i] == 'E':
-                charge -= 1
-            else:
-                charge += 0
-        return charge
+            if i in self._neg_acids:
+                charge+= 1
+        self.chargee = charge
+        return self.chargee
+            
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    
-file_name = Sequence(input())
+seq = Sequence(input())

@@ -27,4 +27,30 @@ def _parse(self) -> tuple[str, str]:
              motifs[key] = s
              motifs_tup = tuple(motifs.items())
         return motifs_tup
+
+
+if self._check(string, seq_type):
+            self.string = string
+            self.seq_type = seq_type
+        else:
+            raise NameError
+
+
+
+
+        protein = ''
+        m_rna = ''
+        for i in range(len(self.string)):
+            if self.string[i] == 'A':
+                m_rna += 'A'
+            if self.string[i] == 'T':
+                m_rna += 'U'
+            if self.string[i] == 'C':
+                m_rna += 'C'
+            if self.string[i] == 'G':
+                m_rna += 'G'
+        for i in range(0, len(m_rna), 3):
+            codon = m_rna[i:(i+3)]
+            protein += data[codon]
+        return protein
     
