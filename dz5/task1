@@ -1,11 +1,51 @@
 class Sequence(object):
     def __init__(self, sequence: str) -> None:
-       self.string = sequence
+        """
+        Input:
+        - string : a sequence of 'A's, 'T's, 'G's, 'C's, 'U's
+        
+        Output: None
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # Create sequence attribute of Sequence class with type str           #
+        # from the given string.                                              #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        self.string = sequence
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
        
     def transcribe(self) -> None:
-       raise NameError
+        """
+        Input: None
+
+        Output: None
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # Raise an error, since transrcibe method can work only with elements #
+        # of DNA or RNA classes                                               #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        raise NameError
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     
     def hamming_distance(self, s2: str) -> int:
+        """
+        Input:
+        - sequence : another sequence of 'A's, 'T's, 'G's, 'C's, 'U's
+
+        Output: number of different letters 
+        between sequence attribute and given string sequence
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # First, check that attribute_name and given string have the same     #
+        # length, if not raise Error.                                         #
+        # If the length of strings is the same, loop over one of the strings  #
+        # and count different letters.                                        #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         if len(self.string) != len(s2):
             raise ValueError('Ooops')
         else: c = 0
@@ -14,23 +54,48 @@ class Sequence(object):
                     c += 1
                     self.HDseq = c
         return self.HDseq
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
 class DNA(Sequence):
     def count_nucleotides(self) -> dict:
+        """
+        Input: None
+
+        Output:
+        - a dictionary with keys 'A', 'T', 'G', 'C' and their 
+        corresponding amounts in attribute_name. 
+        {'A': count_A, 'T': count_T, 'G': count_G, 'C': count_C}
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # Counting 'A's, 'T's, 'G's, 'C's either by                           #
+        # looping over attribute_name or using a standard string method.      #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         D_A = self.string.count('A')
         D_T = self.string.count('T')
         D_G = self.string.count('G')
         D_C = self.string.count('C')
         self.countedDNA = {'A': D_A, 'T': D_T, 'C': D_C, 'G': D_G}
         return self.countedDNA
-
-    def transcribe(self) -> str:
-        self.string_transcribedDNA = self.string.replace('T', 'U')
-        return self.string_transcribedDNA
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     def complement_dna(self) -> str:
-       D_G = [*self.string]
-       for i in range(len(D_G)):
+        """
+        Input: None
+
+        Output: a NEW string, where all 'A's were changed to 'T's
+        and vice versa, all 'C's changed to 'G's and vice versa
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # Create a new empty string. Loop over attribute_name with            #
+        # if-statements, while adding corresponding letters                   #
+        # to the empty string.                                                #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        D_G = [*self.string]
+        for i in range(len(D_G)):
             if D_G[i] == 'A':
              D_G[i] = 'T'
             elif D_G[i] == 'T':
@@ -41,20 +106,68 @@ class DNA(Sequence):
              D_G[i] = 'G'
              self.D_K = ''.join(D_G)
              return self.D_K
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    
+    def transcribe(self) -> str:
+        """
+        Input: None
+
+        Output: a NEW string, where all 'T's were changed to 'U's
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # Create a new empty string. Loop over attribute_name with            #
+        # if-statements, while adding corresponding letters                   #
+        # to the empty string.                                                #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        
+        self.string_transcribedDNA = self.string.replace('T', 'U')
+        return self.string_transcribedDNA
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+
     
 class RNA(Sequence):
     def count_nucleotides(self) -> dict:
-         D_AA = self.string.count('A')
-         D_UU = self.string.count('U')
-         D_GG = self.string.count('G')
-         D_CC = self.string.count('C')
-         self.countedRNA = {'A': D_AA, 'U': D_UU, 'C': D_CC, 'G': D_GG}
-         return self.countedRNA
+        """
+        Input: None
+
+        Output:
+        - a dictionary with keys 'A', 'U', 'G', 'C' and their 
+        corresponding amounts in attribute_name. 
+        {'A': count_A, 'U': count_U, 'G': count_G, 'C': count_C}
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # Counting 'A's, 'U's, 'G's, 'C's either by                           #
+        # looping over attribute_name or using a standard string method.      #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        D_AA = self.string.count('A') 
+        D_UU = self.string.count('U')
+        D_GG = self.string.count('G')
+        D_CC = self.string.count('C')
+        self.countedRNA = {'A': D_AA, 'U': D_UU, 'C': D_CC, 'G': D_GG}
+        return self.countedRNA
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     
     def transcribe(self) -> str:
-         self.string_transcribed = self.string.replace('U', 'T')
-         return self.string_transcribed
+        """
+        Input: None
 
+        Output: a NEW string, where all 'U's were changed to 'T's
+        """
+        #######################################################################
+        # TODO:                                                               #
+        # Create a new empty string. Loop over attribute_name with            #
+        # if-statements, while adding corresponding letters                   #
+        # to the empty string.                                                #
+        #######################################################################
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        self.string_transcribed = self.string.replace('U', 'T')
+        return self.string_transcribed
+
+        # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
 seq = Sequence('AATCCGCAGCTAT')
 seq.hamming_distance('AGGCGCATTGCGT')
