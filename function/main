@@ -1,0 +1,8 @@
+from triangle import Triangle
+
+my_triangle = Triangle(9, 6, 8)
+
+area = my_triangle.square()
+area = square(5, 7, 9)
+print("Площадь треугольника:", area)
+
