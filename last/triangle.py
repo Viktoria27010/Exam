@@ -20,11 +20,3 @@ class Triangle:
         s = (a + b + c) / 2
         area = np.sqrt(s * (s - a) * (s - b) * (s - c))
         return area
-
-tr = Triangle(3, 4, 5)
-
-firstval = tr.square()
-print("Площадь треугольника из класса", firstval)
-
-secondval = tr.square(7, 8, 9)
-print("Площадь треугольника по значениям", secondval)
