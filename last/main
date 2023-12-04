@@ -1,0 +1,9 @@
+from triangle import Triangle
+
+tr = Triangle(3, 4, 5)
+
+firstval = tr.square()
+print("Площадь треугольника из класса", firstval)
+
+secondval = tr.square(7, 8, 9)
+print("Площадь треугольника по значениям", secondval)
