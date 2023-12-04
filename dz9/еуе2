@@ -1,0 +1,102 @@
+import pygame
+import random
+
+# Инициализация Pygame
+pygame.init()
+
+# Размеры игрового поля
+WIDTH = 800
+HEIGHT = 600
+
+# Цвета
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+# Размеры одной ячейки в игровом поле
+CELL_SIZE = 30
+
+
+# Класс блока
+class Block:
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+
+
+# Класс игры
+class Tetris:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("Tetris")
+        self.clock = pygame.time.Clock()
+        self.font = pygame.font.Font(None, 36)
+        self.falling_block = self.get_random_block()
+        self.blocks = []
+
+    # Рисование игрового поля
+    def draw_grid(self):
+        for x in range(0, WIDTH, CELL_SIZE):
+            pygame.draw.line(self.screen, WHITE, (x, 0), (x, HEIGHT))
+        for y in range(0, HEIGHT, CELL_SIZE):
+            pygame.draw.line(self.screen, WHITE, (0, y), (WIDTH, y))
+
+    # Рисование блока
+    def draw_block(self, block):
+        pygame.draw.rect(self.screen, block.color, (block.x, block.y, CELL_SIZE, CELL_SIZE))
+
+    # Генерация случайного блока
+    def get_random_block(self):
+        x = random.randint(0, WIDTH - CELL_SIZE)
+        y = 0
+        color = random.choice([RED, GREEN, BLUE])
+        return Block(x, y, color)
+
+    # Проверка столкновения блоков
+    def check_collision(self):
+        for block in self.blocks:
+            if block.x == self.falling_block.x and block.y == self.falling_block.y + CELL_SIZE:
+                return True
+        if self.falling_block.y >= HEIGHT - CELL_SIZE:
+            return True
+        return False
+
+    # Обновление игры
+    def update(self):
+        self.falling_block.y += CELL_SIZE
+        if self.check_collision():
+            self.blocks.append(self.falling_block)
+            self.falling_block = self.get_random_block()
+
+    # Отрисовка игры на экране
+    def render(self):
+        self.screen.fill(BLACK)
+        self.draw_grid()
+        for block in self.blocks:
+            self.draw_block(block)
+        self.draw_block(self.falling_block)
+        score_text = self.font.render("Score: {}".format(len(self.blocks)), True, WHITE)
+        self.screen.blit(score_text, (10, 10))
+        pygame.display.flip()
+
+    # Запуск игры
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+            self.update()
+            self.render()
+            self.clock.tick(10)
+
+        pygame.quit()
+
+
+# Создание игры и запуск
+if __name__ == '__main__':
+    game = Tetris()
+    game.run()

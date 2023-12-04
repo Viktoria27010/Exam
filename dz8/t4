@@ -1,0 +1,125 @@
+import pygame
+import random
+
+# Инициализация Pygame
+pygame.init()
+
+# Определение размеров и цветов игрового поля
+width, height = 800, 600
+black = (0, 0, 0)
+white = (255, 255, 255)
+block_size = 30
+
+# Создание окна
+window = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Тетрис")
+
+# Определение формы и цвета тетромино
+tetromino_shapes = [
+    [[1, 1, 1, 1]],
+    [[1, 1], [1, 1]],
+    [[1, 1, 0], [0, 1, 1]],
+    [[0, 1, 1], [1, 1, 0]],
+    [[1, 1, 1], [0, 1, 0]]
+]
+tetromino_colors = [
+    (255, 0, 0),
+    (0, 255, 0),
+    (0, 0, 255),
+    (255, 255, 0),
+    (255, 0, 255)
+]
+
+def draw_grid():
+    for x in range(0, width, block_size):
+        pygame.draw.line(window, white, (x, 0), (x, height))
+    for y in range(0, height, block_size):
+        pygame.draw.line(window, white, (0, y), (width, y))
+
+def draw_tetromino(tetromino, x, y, color):
+    for row in range(len(tetromino)):
+        for col in range(len(tetromino[row])):
+            if tetromino[row][col] == 1:
+                pygame.draw.rect(window, color, (x + col * block_size, y + row * block_size, block_size, block_size))
+
+def is_collision(tetromino, x, y, grid):
+    for row in range(len(tetromino)):
+        for col in range(len(tetromino[row])):
+            if tetromino[row][col] == 1:
+                if y + row >= len(grid) or x + col < 0 or x + col >= len(grid[row]) or grid[y + row][x + col] != black:
+                    return True
+    return False
+
+def clear_rows(grid):
+    full_rows = []
+    for i in range(len(grid)):
+        if black not in grid[i]:
+            full_rows.append(i)
+    for row in full_rows:
+        del grid[row]
+        grid.insert(0, [black] * len(grid[0]))
+
+# Создание игровой сетки
+grid = [[black] * (width // block_size) for _ in range(height // block_size)]
+
+clock = pygame.time.Clock()
+
+game_over = False
+score = 0
+
+# Основной игровой цикл
+while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_over = True
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        x -= block_size
+        if is_collision(current_tetromino, x, y, grid):
+            x += block_size
+    elif keys[pygame.K_RIGHT]:
+        x += block_size
+        if is_collision(current_tetromino, x, y, grid):
+            x -= block_size
+    elif keys[pygame.K_DOWN]:
+        y += block_size
+        if is_collision(current_tetromino, x, y, grid):
+            y -= block_size
+    elif keys[pygame.K_UP]:
+        rotated_tetromino = list(zip(*current_tetromino[::-1]))  # Поворот на 90 градусов
+        if not is_collision(rotated_tetromino, x, y, grid):
+            current_tetromino = rotated_tetromino
+
+    if not is_collision(current_tetromino, x, y, grid):
+        y += block_size
+    else:
+        for row in range(len(current_tetromino)):
+            for col in range(len(current_tetromino[row])):
+                if current_tetromino[row][col] == 1:
+                    grid[y // block_size + row][x // block_size + col] = tetromino_colors[tetromino_index]
+        clear_rows(grid)
+        tetromino_index = random.randint(0, len(tetromino_shapes) - 1)
+        current_tetromino = tetromino_shapes[tetromino_index]
+        x = width // 2 - len(current_tetromino[0]) // 2 * block_size
+        y = 0
+
+        if is_collision(current_tetromino, x, y, grid):
+            game_over = True
+
+    # Очистка окна
+    window.fill(black)
+
+    # Отрисовка сетки
+    draw_grid()
+
+    # Отрисовка тетромино
+    draw_tetromino(current_tetromino, x, y, tetromino_colors[tetromino_index])
+
+    # Обновление экрана
+    pygame.display.flip()
+
+    clock.tick(10)
+
+# Завершение Pygame
+pygame.quit()
